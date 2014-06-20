@@ -23,7 +23,7 @@ module.exports = function(grunt) {
       var options = this.options({
         cache: false
       });
-      console.log(options.locals);
+
       swig.setDefaults(options);
 
       function getFileName(filepath) {
