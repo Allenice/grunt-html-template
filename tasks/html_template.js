@@ -19,10 +19,11 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('html_template', 'html builder use swig template', function() {
 
+      // get use config option, default options will be overwritten
       var options = this.options({
         cache: false
       });
-
+      console.log(options.locals);
       swig.setDefaults(options);
 
       function getFileName(filepath) {
@@ -30,8 +31,10 @@ module.exports = function(grunt) {
       }
 
       this.files.forEach(function(f) {
+
         f.src.filter(function(filepath){
           var filename = getFileName(filepath);
+
           if(!grunt.file.exists(filepath)) {
             grunt.log.warn('Source file "' + filepath + '" not found.');
             return false;
@@ -40,13 +43,21 @@ module.exports = function(grunt) {
           } else {
             return true;
           }
+
         }).map(function(filepath){
           var dest = f.dest.substring(0, f.dest.lastIndexOf('.')) + '.html';
           var src = path.resolve(filepath);
-          grunt.log.writeln('creating file: ' + dest);
-          grunt.file.write(dest, beautify_html(swig.renderFile(src, {}), {
-            "indent_size": 2
-          }));
+
+          grunt.log.writeln('writing file: ' + dest);
+
+          grunt.file.write(
+            dest,
+            beautify_html(
+              swig.renderFile(src, {}),
+              options.beautify
+            )
+          );
+
           grunt.log.writeln('create file: ' + dest);
         });
       });
