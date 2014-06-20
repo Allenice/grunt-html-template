@@ -24,6 +24,8 @@ module.exports = function(grunt) {
         cache: false
       });
 
+      options.beautify = options.beautify || {};
+
       swig.setDefaults(options);
 
       function getFileName(filepath) {

@@ -1,3 +1,3 @@
 <a href="javascript:;">
-  <span>footer - Allenice</span>
+  <span>footer</span>
 </a>

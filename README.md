@@ -1,6 +1,6 @@
 # grunt-html-template
 
-> html builder use swig template
+> Html builder use swig template. You can use swig tempalte feature to generate html page.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
@@ -24,66 +24,63 @@ In your project's Gruntfile, add a section named `html_template` to the data obj
 
 ```js
 grunt.initConfig({
-  html_template: {
-    options: {
-      // Task-specific options go here.
+    html_template: {
+        options: {
+            locals:  {
+                title: "Allenice"
+            },
+            beautify: {
+                indent_size: 2
+            }
+        },
+        build_html: {
+            expand: true,
+            cwd: "test/demo/tpl",
+            src: "**/*.tpl",
+            dest: "test/demo/www"
+        }
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
 });
 ```
 
 ### Options
+1. You can use all options of [swig](http://paularmstrong.github.io/swig/docs/api/). By default, cache is set to false.
+2. You can use options of [js-beautify](https://www.npmjs.org/package/js-beautify) in beautify property
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
-
-A string value that is used to do something with whatever.
-
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
-
-A string value that is used to do something else with whatever else.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+#### default options
 
 ```js
 grunt.initConfig({
-  html_template: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    html_template: {
+        dev: {
+            options: {
+                autoescape: ture,
+                cache: "false",
+                varControls: ['{{', '}}'],
+                tagControls: ['{%', '%}'],
+                cmtControls: ['{#', '#}'],
+                locals:  {},
+                cache: false,
+                loader: swig.loaders.fs,
+                beautify: {
+                    indent_size: 4,
+                    indent_char: " ",
+                    indent_with_tabs: false,
+                    preserve_newlines: true,
+                    max_preserve_newlines: 10,
+                    wrap_line_length: 0,
+                    indent_inner_html: false,
+                    brace_style: "collapse"
+                }
+            },
+            expand: true,
+            cwd: "test/demo/tpl",
+            src: "**/*.tpl",
+            dest: "test/demo/www"
+        }
     },
-  },
 });
 ```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
-
-```js
-grunt.initConfig({
-  html_template: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
-
-## Release History
-_(Nothing yet)_

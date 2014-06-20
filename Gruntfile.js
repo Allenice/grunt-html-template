@@ -25,13 +25,13 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     html_template: {
+      options: {
+        locals:  require('./locals'),
+        beautify: {
+          indent_size: 2
+        }
+      },
       build_html: {
-        options: {
-          locals:  require('./locals'),
-          beautify: {
-            "indent_size": 2
-          }
-        },
         expand: true,
         cwd: "test/demo/tpl",
         src: "**/*.tpl",
