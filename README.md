@@ -1,6 +1,6 @@
 # grunt-html-template
 
-> Html builder use swig template. You can use swig tempalte feature to generate html page.
+> Html builder use swig template. You can use swig template feature to generate html page.
 
 ## Getting Started
 This plugin requires Grunt `~0.4.5`
