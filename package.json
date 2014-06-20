@@ -36,6 +36,10 @@
   "peerDependencies": {
     "grunt": "~0.4.5"
   },
+  "dependencies": {
+    "swig": "~1.3.2",
+    "js-beautify": "~1.5.1"
+  },
   "keywords": [
     "gruntplugin"
   ]

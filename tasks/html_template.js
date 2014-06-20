@@ -8,43 +8,48 @@
 
 'use strict';
 
+var swig = require("swig"),
+    path = require("path"),
+    beautify_html = require("js-beautify").html;
+
 module.exports = function(grunt) {
 
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
   grunt.registerMultiTask('html_template', 'html builder use swig template', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
-        }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
+      var options = this.options({
+        cache: false
+      });
 
-      // Handle options.
-      src += options.punctuation;
+      swig.setDefaults(options);
 
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
+      function getFileName(filepath) {
+        return ((/\/?(\w+)\./).exec(filepath) || [,''])[1];
+      }
 
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
-    });
+      this.files.forEach(function(f) {
+        f.src.filter(function(filepath){
+          var filename = getFileName(filepath);
+          if(!grunt.file.exists(filepath)) {
+            grunt.log.warn('Source file "' + filepath + '" not found.');
+            return false;
+          } else if((/^_/).test(filename)) {
+            return false;
+          } else {
+            return true;
+          }
+        }).map(function(filepath){
+          var dest = f.dest.substring(0, f.dest.lastIndexOf('.')) + '.html';
+          var src = path.resolve(filepath);
+          grunt.log.writeln('creating file: ' + dest);
+          grunt.file.write(dest, beautify_html(swig.renderFile(src, {}), {
+            "indent_size": 2
+          }));
+          grunt.log.writeln('create file: ' + dest);
+        });
+      });
   });
 
 };
