@@ -1,6 +1,6 @@
 {
   "name": "grunt-html-template",
-  "description": "html builder use swig template",
+  "description": "html builder use swig template feature",
   "version": "0.1.0",
   "homepage": "https://github.com/Allenice/grunt-html-template",
   "author": {
@@ -41,6 +41,12 @@
     "js-beautify": "~1.5.1"
   },
   "keywords": [
-    "gruntplugin"
-  ]
+    "gruntplugin",
+    "grunt",
+    "swig",
+    "html",
+    "generator",
+    "nodejs"
+  ],
+  "readmeFilename": "README.md"
 }
