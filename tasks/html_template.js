@@ -28,14 +28,10 @@ module.exports = function(grunt) {
 
       swig.setDefaults(options);
 
-      function getFileName(filepath) {
-        return ((/\/?(\w+)\./).exec(filepath) || [,''])[1];
-      }
-
       this.files.forEach(function(f) {
 
         f.src.filter(function(filepath){
-          var filename = getFileName(filepath);
+          var filename = path.basename(filepath);
 
           if(!grunt.file.exists(filepath)) {
             grunt.log.warn('Source file "' + filepath + '" not found.');

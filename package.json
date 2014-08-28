@@ -1,7 +1,7 @@
 {
   "name": "grunt-html-template",
   "description": "html builder use swig template feature",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/Allenice/grunt-html-template",
   "author": {
     "name": "Allenice",
