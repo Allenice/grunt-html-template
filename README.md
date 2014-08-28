@@ -43,6 +43,8 @@ grunt.initConfig({
 });
 ```
 
+if your template filename begin with '_', it will not be compiled.
+
 ### Options
 1. You can use all options of [swig](http://paularmstrong.github.io/swig/docs/api/). By default, cache is set to false.
 2. You can use options of [js-beautify](https://www.npmjs.org/package/js-beautify) in beautify property
