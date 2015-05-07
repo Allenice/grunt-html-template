@@ -11,7 +11,7 @@
 </div>
 
 <div class="main">
-  {% block main %}{% endblock %}
+  {% block main %}f{% endblock %}
 </div>
 
 <div class="footer">

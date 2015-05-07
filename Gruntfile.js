@@ -31,7 +31,16 @@ module.exports = function(grunt) {
           indent_size: 2
         }
       },
-      build_html: {
+      dev: {
+        options: {
+          force: false
+        },
+        expand: true,
+        cwd: "test/demo/tpl",
+        src: "**/*.tpl",
+        dest: "test/demo/www"
+      },
+      build: {
         expand: true,
         cwd: "test/demo/tpl",
         src: "**/*.tpl",
@@ -42,6 +51,13 @@ module.exports = function(grunt) {
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js']
+    },
+
+    watch: {
+      html: {
+        files: ['test/demo/**/*.tpl'],
+        tasks: ['html_template:dev']
+      }
     }
 
   });
@@ -52,6 +68,7 @@ module.exports = function(grunt) {
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
@@ -59,5 +76,7 @@ module.exports = function(grunt) {
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
+
+  grunt.registerTask('html', ['html_template:build', 'watch:html']);
 
 };

@@ -10,6 +10,7 @@
 
 var swig = require("swig"),
     path = require("path"),
+    fs = require('fs'),
     beautify_html = require("js-beautify").html;
 
 module.exports = function(grunt) {
@@ -17,48 +18,68 @@ module.exports = function(grunt) {
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('html_template', 'html builder use swig template', function() {
+  grunt.registerMultiTask('html_template', 'html builder use swig template', function(target) {
 
-      // get use config option, default options will be overwritten
-      var options = this.options({
-        cache: false
-      });
+    // get use config option, default options will be overwritten
+    var options = this.options({
+      cache: false,
+      force: true // compile all files
+    });
 
-      options.beautify = options.beautify || {};
+    options.beautify = options.beautify || {};
+  
+    swig.setDefaults(options);
 
-      swig.setDefaults(options);
+    var now = Date.now(),
+        changeFiles = [],
+        files = [],
+        compileAll = false;
 
-      this.files.forEach(function(f) {
+    this.files.forEach(function(f) {
+      var filepath = f.src[0],
+          filename = path.basename(filepath),
+          isPartial = (/^_/).test(filename),
+          stat;
 
-        f.src.filter(function(filepath){
-          var filename = path.basename(filepath);
+      if(!grunt.file.exists(filepath)) {
+        grunt.log.warn('Source file "' + filepath + '" not found.');
+        return;
+      }
 
-          if(!grunt.file.exists(filepath)) {
-            grunt.log.warn('Source file "' + filepath + '" not found.');
-            return false;
-          } else if((/^_/).test(filename)) {
-            return false;
-          } else {
-            return true;
-          }
+      // store file which is not start with '_'
+      if(!isPartial) {
+        files.push(f);
+      }
 
-        }).map(function(filepath){
-          var dest = f.dest.substring(0, f.dest.lastIndexOf('.')) + '.html';
-          var src = path.resolve(filepath);
+      // check file is change
+      stat = fs.statSync(path.resolve(filepath));
+      if(now - stat.mtime.getTime() < 5000 || options.force) {
+        if(isPartial) {
+          // the changed file is start with '_', and will compile all files
+          compileAll = true;
+          return;
+        }
+        changeFiles.push(f);
+      }
 
-          grunt.log.writeln('writing file: ' + dest);
+    });
 
-          grunt.file.write(
-            dest,
-            beautify_html(
-              swig.renderFile(src, {}),
-              options.beautify
-            )
-          );
+    changeFiles = compileAll ? files : changeFiles;
+    changeFiles.forEach(function (f) {
+      var dest = f.dest.substring(0, f.dest.lastIndexOf('.')) + '.html';
+      var src = path.resolve(f.src[0]);
 
-          grunt.log.writeln('create file: ' + dest);
-        });
-      });
+      grunt.file.write(
+        dest,
+        beautify_html(
+          swig.renderFile(src, {}),
+          options.beautify
+        )
+      );
+
+      grunt.log.writeln('write file: ' + dest);
+    });
+
   });
 
 };
