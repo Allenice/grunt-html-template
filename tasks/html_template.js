@@ -69,6 +69,8 @@ module.exports = function(grunt) {
       var dest = f.dest.substring(0, f.dest.lastIndexOf('.')) + '.html';
       var src = path.resolve(f.src[0]);
 
+      try {
+
       grunt.file.write(
         dest,
         beautify_html(
@@ -76,6 +78,9 @@ module.exports = function(grunt) {
           options.beautify
         )
       );
+      }catch (e) {
+        grunt.fail.fatal (e);
+      }
 
       grunt.log.writeln('write file: ' + dest);
     });
