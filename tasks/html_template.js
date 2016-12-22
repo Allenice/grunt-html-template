@@ -70,14 +70,13 @@ module.exports = function(grunt) {
       var src = path.resolve(f.src[0]);
 
       try {
-
-      grunt.file.write(
-        dest,
-        beautify_html(
-          swig.renderFile(src, {}),
-          options.beautify
-        )
-      );
+        grunt.file.write(
+          dest,
+          beautify_html(
+            swig.renderFile(src, {}),
+            options.beautify
+          )
+        );
       }catch (e) {
         grunt.fail.fatal (e);
       }
